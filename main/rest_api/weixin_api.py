@@ -2,6 +2,7 @@
 __author__ = 'wanglu'
 
 import hashlib
+import logging
 
 from flask import Blueprint,request
 
@@ -10,6 +11,8 @@ from ..weixin import reply
 import main.config.app_settings as conf
 
 weixin_blueprint = Blueprint("weixin_blueprint",__name__)
+
+logger = logging.getLogger(__name__)
 
 @weixin_blueprint.route("/",methods=["GET","POST"])
 def index():
@@ -28,7 +31,7 @@ def index():
             sha1 = hashlib.sha1()
             map(sha1.update, list)
             hashcode = sha1.hexdigest()
-            print "handle/GET func: hashcode, signature: ", hashcode, signature
+            print ("handle/GET func: hashcode, signature: ", hashcode, signature)
 
             if hashcode == signature:
                 return echostr
@@ -37,7 +40,7 @@ def index():
 
         if request.method == "POST":
             webData = request.data
-            print "Handle Post webdata is ", webData   #后台打日志
+            logger.info("Handle Post webdata is: %s" % webData)   #后台打日志
             recMsg = receive.parse_xml(webData)
             if isinstance(recMsg, receive.Msg):
                 toUser = recMsg.FromUserName
@@ -65,9 +68,9 @@ def index():
                     replyMsg = reply.TextMsg(toUser,fromUser,content)
                     return replyMsg.send()
             else:
-                print "暂且不处理"
+                logger.info("暂且不处理")
                 return "success"
-    except Exception,err:
+    except Exception as err:
         return "error"
 
 

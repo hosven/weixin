@@ -3,7 +3,7 @@ __author__ = 'wanglu'
 
 from flask import Blueprint,request
 
-from util import *
+from .util import *
 
 test_blueprint = Blueprint("test_blueprint",__name__)
 
