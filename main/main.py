@@ -1,26 +1,18 @@
 #coding=utf-8
 __author__ = 'wanglu'
 
-import logging
-import logging.config
+import os
 
-from flask import Flask,request
-
-from .config import app_settings as conf
-
-logging.config.dictConfig(conf.LOGGING_CONFIG)
-
-app = Flask(__name__)
-
-# Flask app configuration
-app.config.from_object("main.config.app_settings")  # default config settings
-
-from .rest_api.test_api import test_blueprint
+from wl_flask.main.main import *
+from wl_flask.main.common.util import get_app_path
 from .rest_api.weixin_api import weixin_blueprint
+from .config.app_settings import APP_KEY
 
-rest_api_name = 'api'
-app.register_blueprint(test_blueprint, url_prefix='/'+rest_api_name)
-app.register_blueprint(weixin_blueprint)
+app.register_blueprint(weixin_blueprint, url_prefix='/'+rest_api_no_db)
 
-
+@app.route("/static/<path>")
+def weixin(path):
+    app_path = get_app_path(APP_KEY)
+    static = os.path.join(app_path,"main/static")
+    return send_from_directory(static,path)
 
