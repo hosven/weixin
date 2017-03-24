@@ -46,7 +46,7 @@ def get_weixin_ip(access_token):
 
 if __name__ == "__main__":
     access_token = get_access_token()
-    print get_weixin_ip(access_token)
+    print (get_weixin_ip(access_token))
 
 
 
