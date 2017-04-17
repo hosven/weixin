@@ -3,6 +3,8 @@ __author__ = 'wanglu'
 
 from wl_flask.main.config.app_settings import *
 
+IS_USE_MONGO = False
+
 APP_KEY = "weixin"
 
 STATIC_URL="static"
